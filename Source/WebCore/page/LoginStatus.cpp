@@ -24,7 +24,7 @@
  */
 
 #include "config.h"
-#include "LoggedInStatus.h"
+#include "LoginStatus.h"
 
 #include <wtf/IsoMallocInlines.h>
 #include <wtf/text/StringCommon.h>
@@ -34,35 +34,35 @@ namespace WebCore {
 
 using CodeUnitMatchFunction = bool (*)(UChar);
 
-WTF_MAKE_ISO_ALLOCATED_IMPL(LoggedInStatus);
+WTF_MAKE_ISO_ALLOCATED_IMPL(LoginStatus);
 
-ExceptionOr<UniqueRef<LoggedInStatus>> LoggedInStatus::create(const RegistrableDomain& domain, const String& username, CredentialTokenType tokenType, AuthenticationType authType)
+ExceptionOr<UniqueRef<LoginStatus>> LoginStatus::create(const RegistrableDomain& domain, const String& username, CredentialTokenType tokenType, AuthenticationType authType)
 {
     return create(domain, username, tokenType, authType, authType == AuthenticationType::Unmanaged ? TimeToLiveShort : TimeToLiveLong);
 }
 
-ExceptionOr<UniqueRef<LoggedInStatus>> LoggedInStatus::create(const RegistrableDomain& domain, const String& username, CredentialTokenType tokenType, AuthenticationType authType, Seconds timeToLive)
+ExceptionOr<UniqueRef<LoginStatus>> LoginStatus::create(const RegistrableDomain& domain, const String& username, CredentialTokenType tokenType, AuthenticationType authType, Seconds timeToLive)
 {
     if (domain.isEmpty())
-        return Exception { ExceptionCode::SecurityError, "IsLoggedIn status can only be set for origins with a registrable domain."_s };
+        return Exception { ExceptionCode::SecurityError, "LoginStatus status can only be set for origins with a registrable domain."_s };
 
     if (username.isEmpty())
-        return Exception { ExceptionCode::SyntaxError, "IsLoggedIn requires a non-empty username."_s };
+        return Exception { ExceptionCode::SyntaxError, "LoginStatus requires a non-empty username."_s };
 
     unsigned length = username.length();
     if (length > UsernameMaxLength)
-        return Exception { ExceptionCode::SyntaxError, makeString("IsLoggedIn usernames cannot be longer than "_s, UsernameMaxLength) };
+        return Exception { ExceptionCode::SyntaxError, makeString("LoginStatus usernames cannot be longer than "_s, UsernameMaxLength) };
 
     auto spaceOrNewline = username.find([](UChar ch) {
         return deprecatedIsSpaceOrNewline(ch);
     });
     if (spaceOrNewline != notFound)
-        return Exception { ExceptionCode::InvalidCharacterError, "IsLoggedIn usernames cannot contain whitespace or newlines."_s };
+        return Exception { ExceptionCode::InvalidCharacterError, "LoginStatus usernames cannot contain whitespace or newlines."_s };
 
-    return makeUniqueRef<LoggedInStatus>(*new LoggedInStatus(domain, username, tokenType, authType, timeToLive));
+    return makeUniqueRef<LoginStatus>(*new LoginStatus(domain, username, tokenType, authType, timeToLive));
 }
 
-LoggedInStatus::LoggedInStatus(const RegistrableDomain& domain, const String& username, CredentialTokenType tokenType, AuthenticationType authType, Seconds timeToLive)
+LoginStatus::LoginStatus(const RegistrableDomain& domain, const String& username, CredentialTokenType tokenType, AuthenticationType authType, Seconds timeToLive)
     : m_domain { domain }
     , m_username { username }
     , m_tokenType { tokenType }
@@ -72,18 +72,18 @@ LoggedInStatus::LoggedInStatus(const RegistrableDomain& domain, const String& us
     setTimeToLive(timeToLive);
 }
 
-void LoggedInStatus::setTimeToLive(Seconds timeToLive)
+void LoginStatus::setTimeToLive(Seconds timeToLive)
 {
     m_timeToLive = std::min(timeToLive, m_authType == AuthenticationType::Unmanaged ? TimeToLiveShort : TimeToLiveLong);
 }
 
-bool LoggedInStatus::hasExpired() const
+bool LoginStatus::hasExpired() const
 {
     ASSERT(!m_domain.isEmpty() && !m_username.isEmpty());
     return WallTime::now() > m_loggedInTime + m_timeToLive;
 }
 
-WallTime LoggedInStatus::expiry() const
+WallTime LoginStatus::expiry() const
 {
     return WallTime::now() + m_timeToLive;
 }

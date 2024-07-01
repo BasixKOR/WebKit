@@ -34,8 +34,8 @@
 
 namespace WebCore {
 
-class LoggedInStatus {
-    WTF_MAKE_ISO_ALLOCATED_EXPORT(LoggedInStatus, WEBCORE_EXPORT);
+class LoginStatus {
+    WTF_MAKE_ISO_ALLOCATED_EXPORT(LoginStatus, WEBCORE_EXPORT);
 public:
     static constexpr uint32_t UsernameMaxLength = 64;
     static constexpr Seconds TimeToLiveShort { 24_h * 7 };
@@ -44,8 +44,8 @@ public:
     enum class CredentialTokenType : bool { LegacyCookie, HTTPStateToken };
     enum class AuthenticationType : uint8_t { WebAuthn, PasswordManager, Unmanaged };
 
-    WEBCORE_EXPORT static ExceptionOr<UniqueRef<LoggedInStatus>> create(const RegistrableDomain&, const String& username, CredentialTokenType, AuthenticationType);
-    WEBCORE_EXPORT static ExceptionOr<UniqueRef<LoggedInStatus>> create(const RegistrableDomain&, const String& username, CredentialTokenType, AuthenticationType, Seconds timeToLive);
+    WEBCORE_EXPORT static ExceptionOr<UniqueRef<LoginStatus>> create(const RegistrableDomain&, const String& username, CredentialTokenType, AuthenticationType);
+    WEBCORE_EXPORT static ExceptionOr<UniqueRef<LoginStatus>> create(const RegistrableDomain&, const String& username, CredentialTokenType, AuthenticationType, Seconds timeToLive);
 
     WEBCORE_EXPORT void setTimeToLive(Seconds);
     WEBCORE_EXPORT bool hasExpired() const;
@@ -58,7 +58,7 @@ public:
     WallTime loggedInTime() const { return m_loggedInTime; }
 
 private:
-    LoggedInStatus(const RegistrableDomain&, const String& username, CredentialTokenType, AuthenticationType, Seconds timeToLive);
+    LoginStatus(const RegistrableDomain&, const String& username, CredentialTokenType, AuthenticationType, Seconds timeToLive);
 
     RegistrableDomain m_domain;
     String m_username;

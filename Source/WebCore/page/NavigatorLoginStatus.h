@@ -23,12 +23,34 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-[
-    SecureContext,
-    EnabledBySetting=IsLoggedInAPIEnabled,
-    ImplementedBy=NavigatorIsLoggedIn
-] partial interface Navigator {
-    Promise<undefined> setLoggedIn();
-    Promise<undefined> setLoggedOut();
-    Promise<boolean> isLoggedIn();
+#pragma once
+
+#include "Supplementable.h"
+
+namespace WebCore {
+
+class DeferredPromise;
+class Navigator;
+class NavigatorLoginStatus final : public Supplement<Navigator> {
+    WTF_MAKE_FAST_ALLOCATED;
+public:
+    explicit NavigatorLoginStatus(Navigator& navigator)
+        : m_navigator(navigator)
+    {
+    }
+    static void setLoggedIn(Navigator&, Ref<DeferredPromise>&&);
+    static void setLoggedOut(Navigator&, Ref<DeferredPromise>&&);
+    static void isLoggedIn(Navigator&, Ref<DeferredPromise>&&);
+
+private:
+    void setLoggedIn(Ref<DeferredPromise>&&);
+    void setLoggedOut(Ref<DeferredPromise>&&);
+    void isLoggedIn(Ref<DeferredPromise>&&);
+
+    static NavigatorLoginStatus* from(Navigator&);
+    static ASCIILiteral supplementName();
+
+    Navigator& m_navigator;
 };
+
+} // namespace WebCore

@@ -24,45 +24,45 @@
  */
 
 #include "config.h"
-#include "NavigatorIsLoggedIn.h"
+#include "NavigatorLoginStatus.h"
 
 #include "JSDOMPromiseDeferred.h"
 #include "Navigator.h"
 
 namespace WebCore {
 
-NavigatorIsLoggedIn* NavigatorIsLoggedIn::from(Navigator& navigator)
+NavigatorLoginStatus* NavigatorLoginStatus::from(Navigator& navigator)
 {
-    auto* supplement = static_cast<NavigatorIsLoggedIn*>(Supplement<Navigator>::from(&navigator, supplementName()));
+    auto* supplement = static_cast<NavigatorLoginStatus*>(Supplement<Navigator>::from(&navigator, supplementName()));
     if (!supplement) {
-        auto newSupplement = makeUnique<NavigatorIsLoggedIn>(navigator);
+        auto newSupplement = makeUnique<NavigatorLoginStatus>(navigator);
         supplement = newSupplement.get();
         provideTo(&navigator, supplementName(), WTFMove(newSupplement));
     }
     return supplement;
 }
 
-ASCIILiteral NavigatorIsLoggedIn::supplementName()
+ASCIILiteral NavigatorLoginStatus::supplementName()
 {
-    return "NavigatorIsLoggedIn"_s;
+    return "NavigatorLoginStatus"_s;
 }
 
-void NavigatorIsLoggedIn::setLoggedIn(Navigator& navigator, Ref<DeferredPromise>&& promise)
+void NavigatorLoginStatus::setLoggedIn(Navigator& navigator, Ref<DeferredPromise>&& promise)
 {
-    NavigatorIsLoggedIn::from(navigator)->setLoggedIn(WTFMove(promise));
+    NavigatorLoginStatus::from(navigator)->setLoggedIn(WTFMove(promise));
 }
 
-void NavigatorIsLoggedIn::setLoggedOut(Navigator& navigator, Ref<DeferredPromise>&& promise)
+void NavigatorLoginStatus::setLoggedOut(Navigator& navigator, Ref<DeferredPromise>&& promise)
 {
-    NavigatorIsLoggedIn::from(navigator)->setLoggedOut(WTFMove(promise));
+    NavigatorLoginStatus::from(navigator)->setLoggedOut(WTFMove(promise));
 }
 
-void NavigatorIsLoggedIn::isLoggedIn(Navigator& navigator, Ref<DeferredPromise>&& promise)
+void NavigatorLoginStatus::isLoggedIn(Navigator& navigator, Ref<DeferredPromise>&& promise)
 {
-    NavigatorIsLoggedIn::from(navigator)->isLoggedIn(WTFMove(promise));
+    NavigatorLoginStatus::from(navigator)->isLoggedIn(WTFMove(promise));
 }
 
-void NavigatorIsLoggedIn::setLoggedIn(Ref<DeferredPromise>&& promise)
+void NavigatorLoginStatus::setLoggedIn(Ref<DeferredPromise>&& promise)
 {
     if (m_navigator.cookieEnabled())
         promise->resolve();
@@ -70,12 +70,12 @@ void NavigatorIsLoggedIn::setLoggedIn(Ref<DeferredPromise>&& promise)
         promise->reject();
 }
 
-void NavigatorIsLoggedIn::setLoggedOut(Ref<DeferredPromise>&& promise)
+void NavigatorLoginStatus::setLoggedOut(Ref<DeferredPromise>&& promise)
 {
     promise->resolve();
 }
 
-void NavigatorIsLoggedIn::isLoggedIn(Ref<DeferredPromise>&& promise)
+void NavigatorLoginStatus::isLoggedIn(Ref<DeferredPromise>&& promise)
 {
     if (m_navigator.cookieEnabled())
         promise->resolve<IDLBoolean>(true);
