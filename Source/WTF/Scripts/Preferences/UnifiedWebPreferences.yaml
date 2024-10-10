@@ -2633,6 +2633,20 @@ DownloadAttributeEnabled:
     WebCore:
       default: false
 
+DynamicSiteInterventionsEnabled:
+  type: bool
+  status: unstable
+  category: none
+  humanReadableName: "Dynamic Site Interventions"
+  humanReadableDescription: "Enable dynamic site interventions for broken websites"
+  defaultValue:
+    WebKitLegacy:
+      default: false
+    WebKit:
+      default: false
+    WebCore:
+      default: false
+
 EditableLinkBehavior:
   type: uint32_t
   refinedType: WebCore::EditableLinkBehavior
@@ -4691,6 +4705,8 @@ MediaDevicesEnabled:
 MediaEnabled:
   type: bool
   status: embedder
+  humanReadableName: "HTML Media Elements"
+  humanReadableDescription: "Enable HTML media elements <audio>, <video> and <track>"
   condition: ENABLE(VIDEO)
   defaultValue:
     WebKitLegacy:
@@ -4699,6 +4715,20 @@ MediaEnabled:
       default: true
     WebCore:
       default: true
+
+MediaPlaybackEnabled:
+  type: bool
+  status: embedder
+  humanReadableName: "Media Playback Functionalities"
+  humanReadableDescription: "Enable media playback functionalities"
+  defaultValue:
+    WebKitLegacy:
+      default: true
+    WebKit:
+      default: true
+    WebCore:
+      default: true
+  sharedPreferenceForWebProcess: true
 
 MediaPreferredFullscreenWidth:
   type: double
@@ -8109,6 +8139,7 @@ WebAuthenticationEnabled:
     WebCore:
       default: true
   sharedPreferenceForWebProcess: true
+  richJavaScript: true
 
 WebCodecsAV1Enabled:
   type: bool

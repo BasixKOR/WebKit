@@ -3399,6 +3399,28 @@ void WebPage::updateFrameSize(WebCore::FrameIdentifier frameID, WebCore::IntSize
     }
 }
 
+void WebPage::frameCompositedBoundsChanged(WebCore::FrameIdentifier frameID, WebCore::IntPoint contentsOffset)
+{
+    if (!m_page)
+        return;
+
+    ASSERT(m_page->settings().siteIsolationEnabled());
+    RefPtr webFrame = WebProcess::singleton().webFrame(frameID);
+    if (!webFrame)
+        return;
+
+    RefPtr frame = webFrame->coreLocalFrame();
+    if (!frame)
+        return;
+
+    RefPtr frameView = frame->view();
+    if (!frameView)
+        return;
+
+    frameView->compositedBoundsChanged(contentsOffset);
+}
+
+
 void WebPage::tryMarkLayersVolatile(CompletionHandler<void(bool)>&& completionHandler)
 {
     RefPtr drawingArea = m_drawingArea;
@@ -4802,11 +4824,6 @@ void WebPage::updatePreferences(const WebPreferencesStore& store)
         modelProcessConnection->connection().setIgnoreInvalidMessageForTesting();
 #endif // ENABLE(MODEL_PROCESS)
 #endif // ENABLE(IPC_TESTING_API)
-
-#if ENABLE(WEB_AUTHN) && (PLATFORM(IOS) || PLATFORM(VISION))
-    if (isParentProcessAWebBrowser())
-        settings.setWebAuthenticationEnabled(true);
-#endif
     
 #if ENABLE(ALTERNATE_WEBM_PLAYER)
     PlatformMediaSessionManager::setAlternateWebMPlayerEnabled(settings.alternateWebMPlayerEnabled());

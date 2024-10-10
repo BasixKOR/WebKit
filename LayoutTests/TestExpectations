@@ -1919,6 +1919,7 @@ imported/w3c/web-platform-tests/mathml/presentation-markup/scripts/stretchy-mund
 imported/w3c/web-platform-tests/mathml/presentation-markup/scripts/stretchy-munderover-3c.html [ ImageOnlyFailure Pass ]
 imported/w3c/web-platform-tests/mathml/presentation-markup/scripts/stretchy-munderover-3d.html [ ImageOnlyFailure Pass ]
 imported/w3c/web-platform-tests/mathml/presentation-markup/tables/columnspan-rowspan-006.html [ ImageOnlyFailure ]
+imported/w3c/web-platform-tests/mathml/presentation-markup/operators/mo-boolean-attributes-case-insensitive.html [ ImageOnlyFailure ]
 
 imported/w3c/web-platform-tests/mathml/relations/css-styling/mathvariant-auto.html [ ImageOnlyFailure ]
 mathml/non-core/mathvariant/mathvariant-case-sensitivity.html [ ImageOnlyFailure ]
@@ -5170,7 +5171,6 @@ imported/w3c/web-platform-tests/html/canvas/element/manual/fill-and-stroke-style
 imported/w3c/web-platform-tests/html/canvas/element/manual/fill-and-stroke-styles/conic-gradient.html [ ImageOnlyFailure ]
 imported/w3c/web-platform-tests/html/canvas/element/manual/shadows/canvas_shadows_system_colors.html [ ImageOnlyFailure ]
 
-# CSS Masonry Layout not supported.
 webkit.org/b/209460 imported/w3c/web-platform-tests/css/css-grid/abspos/descendant-static-position-001.html [ ImageOnlyFailure ]
 webkit.org/b/209460 imported/w3c/web-platform-tests/css/css-grid/abspos/descendant-static-position-002.html [ ImageOnlyFailure ]
 webkit.org/b/209460 imported/w3c/web-platform-tests/css/css-grid/abspos/descendant-static-position-003.html [ ImageOnlyFailure ]

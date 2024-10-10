@@ -335,7 +335,7 @@ template<typename> class ProcessQualified;
 template<typename> class RectEdges;
 
 using BackForwardItemIdentifier = ProcessQualified<ObjectIdentifier<BackForwardItemIdentifierType>>;
-using DictationContext = LegacyNullableObjectIdentifier<DictationContextType>;
+using DictationContext = ObjectIdentifier<DictationContextType>;
 using FloatBoxExtent = RectEdges<float>;
 using FramesPerSecond = unsigned;
 using IntDegrees = int32_t;
@@ -638,7 +638,7 @@ public:
     bool shouldEnableLockdownMode() const;
 
     bool hasSameGPUAndNetworkProcessPreferencesAs(const API::PageConfiguration&) const;
-    bool hasSameGPUAndNetworkProcessPreferencesAs(const WebPageProxy& page) const { return hasSameGPUAndNetworkProcessPreferencesAs(page.configuration()); }
+    bool hasSameGPUAndNetworkProcessPreferencesAs(const WebPageProxy& page) const { return hasSameGPUAndNetworkProcessPreferencesAs(Ref { page }->configuration()); }
 
     void processIsNoLongerAssociatedWithPage(WebProcessProxy&);
 
@@ -728,6 +728,7 @@ public:
 
 #if ENABLE(VIDEO_PRESENTATION_MODE)
     PlaybackSessionManagerProxy* playbackSessionManager();
+    RefPtr<PlaybackSessionManagerProxy> protectedPlaybackSessionManager();
     VideoPresentationManagerProxy* videoPresentationManager();
     void setMockVideoPresentationModeEnabled(bool);
 #endif
@@ -2478,6 +2479,10 @@ public:
     void didEndPartialIntelligenceTextAnimationImpl();
 #endif
 
+#if PLATFORM(COCOA)
+    void createTextIndicatorForElementWithID(const String& elementID, CompletionHandler<void(std::optional<WebCore::TextIndicatorData>&&)>&&);
+#endif
+
     void resetVisibilityAdjustmentsForTargetedElements(const Vector<Ref<API::TargetedElementInfo>>&, CompletionHandler<void(bool)>&&);
     void adjustVisibilityForTargetedElements(const Vector<Ref<API::TargetedElementInfo>>&, CompletionHandler<void(bool)>&&);
     void numberOfVisibilityAdjustmentRects(CompletionHandler<void(uint64_t)>&&);
@@ -2615,6 +2620,7 @@ private:
 #endif
 
     void updateRemoteFrameSize(WebCore::FrameIdentifier, WebCore::IntSize);
+    void frameCompositedBoundsChanged(WebCore::FrameIdentifier, WebCore::IntPoint);
     void updateSandboxFlags(IPC::Connection&, WebCore::FrameIdentifier, WebCore::SandboxFlags);
 
     void didDestroyNavigation(WebCore::NavigationIdentifier);
@@ -3179,6 +3185,8 @@ private:
     void dropOpeningAppLinkActivity();
     bool hasValidOpeningAppLinkActivity() const;
 #endif
+
+    Ref<BrowsingContextGroup> protectedBrowsingContextGroup() const;
 
     UniqueRef<Internals> m_internals;
     Identifier m_identifier;
