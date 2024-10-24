@@ -228,8 +228,12 @@ void LayerTreeHost::flushLayers()
         WTFBeginSignpost(this, SyncFrame);
 
         m_nicosia.scene->accessState([this](Nicosia::Scene::State& state) {
-            for (auto& compositionLayer : m_nicosia.state.layers)
-                compositionLayer->flushState();
+            for (auto& compositionLayer : m_nicosia.state.layers) {
+                compositionLayer->flushState([] (const Nicosia::CompositionLayer::LayerState& state) {
+                    if (state.backingStore)
+                        state.backingStore->flushUpdate();
+                });
+            }
 
             ++state.id;
             state.layers = m_nicosia.state.layers;
@@ -248,7 +252,7 @@ void LayerTreeHost::flushLayers()
 
     page->didUpdateRendering();
 
-    // Eject any backing stores whose only reference is held in the UncheckedKeyHashMap cache.
+    // Eject any backing stores whose only reference is held in the HashMap cache.
     m_imageBackingStores.removeIf(
         [](auto& it) {
             return it.value->hasOneRef();

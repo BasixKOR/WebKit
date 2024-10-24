@@ -58,7 +58,7 @@ static id<MTLComputePipelineState> createComputePipelineState(id<MTLDevice> devi
     return computePipelineState;
 }
 
-static std::optional<MTLSize> metalSize(auto workgroupSize, const UncheckedKeyHashMap<String, WGSL::ConstantValue>& wgslConstantValues)
+static std::optional<MTLSize> metalSize(auto workgroupSize, const HashMap<String, WGSL::ConstantValue>& wgslConstantValues)
 {
     auto width = WGSL::evaluate(*workgroupSize.width, wgslConstantValues);
     auto height = workgroupSize.height ? WGSL::evaluate(*workgroupSize.height, wgslConstantValues) : 1;
@@ -185,11 +185,6 @@ Ref<BindGroupLayout> ComputePipeline::getBindGroupLayout(uint32_t groupIndex)
 void ComputePipeline::setLabel(String&&)
 {
     // MTLComputePipelineState's labels are read-only.
-}
-
-PipelineLayout& ComputePipeline::pipelineLayout() const
-{
-    return m_pipelineLayout;
 }
 
 const BufferBindingSizesForBindGroup* ComputePipeline::minimumBufferSizes(uint32_t index) const

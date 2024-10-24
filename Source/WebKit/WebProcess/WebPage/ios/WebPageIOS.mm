@@ -1655,7 +1655,7 @@ static std::pair<std::optional<SimpleRange>, SelectionWasFlipped> rangeForPointI
 
     if (!selectionFlippingEnabled) {
         auto node = selectionStart.deepEquivalent().containerNode();
-        if (node && node->renderStyle() && node->renderStyle()->isVerticalWritingMode()) {
+        if (node && node->renderStyle() && node->renderStyle()->writingMode().isVertical()) {
             if (baseIsStart) {
                 int startX = selectionStart.absoluteCaretBounds().center().x();
                 if (pointInDocument.x() > startX)
@@ -1893,6 +1893,32 @@ void WebPage::dispatchSyntheticMouseEventsForSelectionGesture(SelectionTouch tou
     }
 }
 
+void WebPage::clearSelectionAfterTappingSelectionHighlightIfNeeded(WebCore::FloatPoint location)
+{
+    RefPtr localMainFrame = dynamicDowncast<LocalFrame>(m_page->mainFrame());
+    if (!localMainFrame)
+        return;
+
+    auto result = localMainFrame->checkedEventHandler()->hitTestResultAtPoint(LayoutPoint { location }, {
+        HitTestRequest::Type::ReadOnly,
+        HitTestRequest::Type::AllowVisibleChildFrameContentOnly,
+        HitTestRequest::Type::IncludeAllElementsUnderPoint,
+        HitTestRequest::Type::CollectMultipleElements,
+    });
+
+    bool tappedVideo = false;
+    bool tappedLiveText = false;
+    for (Ref node : result.listBasedTestResult()) {
+        if (is<HTMLVideoElement>(node))
+            tappedVideo = true;
+        else if (ImageOverlay::isOverlayText(node))
+            tappedLiveText = true;
+    }
+
+    if (tappedVideo && !tappedLiveText)
+        clearSelection();
+}
+
 void WebPage::updateSelectionWithTouches(const IntPoint& point, SelectionTouch selectionTouch, bool baseIsStart, CompletionHandler<void(const WebCore::IntPoint&, SelectionTouch, OptionSet<SelectionFlags>)>&& completionHandler)
 {
     RefPtr frame = m_page->checkedFocusController()->focusedOrMainFrame();
@@ -2104,35 +2130,34 @@ void WebPage::moveSelectionByOffset(int32_t offset, CompletionHandler<void()>&& 
     
 void WebPage::startAutoscrollAtPosition(const WebCore::FloatPoint& positionInWindow)
 {
-    auto* localMainFrame = dynamicDowncast<LocalFrame>(m_page->mainFrame());
-    if (!localMainFrame)
-        return;
-
-    if (m_focusedElement && m_focusedElement->renderer()) {
-        localMainFrame->eventHandler().startSelectionAutoscroll(m_focusedElement->renderer(), positionInWindow);
-        return;
-    }
-    
     RefPtr frame = m_page->checkedFocusController()->focusedOrMainFrame();
     if (!frame)
         return;
+
+    if (m_focusedElement && m_focusedElement->renderer()) {
+        frame->eventHandler().startSelectionAutoscroll(m_focusedElement->renderer(), positionInWindow);
+        return;
+    }
+
     auto& selection = frame->selection().selection();
     if (!selection.isRange())
         return;
+
     auto range = selection.toNormalizedRange();
     if (!range)
         return;
+
     auto* renderer = range->start.container->renderer();
     if (!renderer)
         return;
 
-    Ref(*localMainFrame)->eventHandler().startSelectionAutoscroll(renderer, positionInWindow);
+    frame->eventHandler().startSelectionAutoscroll(renderer, positionInWindow);
 }
     
 void WebPage::cancelAutoscroll()
 {
-    if (auto* localMainFrame = dynamicDowncast<LocalFrame>(m_page->mainFrame()))
-        localMainFrame->eventHandler().cancelSelectionAutoscroll();
+    if (RefPtr frame = m_page->checkedFocusController()->focusedOrMainFrame())
+        frame->eventHandler().cancelSelectionAutoscroll();
 }
 
 void WebPage::requestEvasionRectsAboveSelection(CompletionHandler<void(const Vector<FloatRect>&)>&& reply)
@@ -3689,7 +3714,7 @@ std::optional<FocusedElementInformation> WebPage::focusedElementInformation()
         bool inFixed = false;
         renderer->localToContainerPoint(FloatPoint(), nullptr, UseTransforms, &inFixed);
         information.insideFixedPosition = inFixed;
-        information.isRTL = renderer->style().direction() == TextDirection::RTL;
+        information.isRTL = renderer->writingMode().isBidiRTL();
 
 #if ENABLE(ASYNC_SCROLLING)
         if (auto* scrollingCoordinator = this->scrollingCoordinator())

@@ -371,6 +371,7 @@ Modules/streams/ReadableStreamSource.cpp
 Modules/streams/TransformStream.cpp
 Modules/streams/WritableStream.cpp
 Modules/url-pattern/URLPattern.cpp
+Modules/url-pattern/URLPatternCanonical.cpp
 Modules/web-locks/WebLock.cpp
 Modules/web-locks/WebLockManager.cpp
 Modules/web-locks/WebLockRegistry.cpp
@@ -1225,11 +1226,12 @@ dom/InlineClassicScript.cpp
 dom/InlineStyleSheetOwner.cpp
 dom/InputEvent.cpp
 dom/InternalObserver.cpp
-dom/InternalObserverFromScript.cpp
+dom/InternalObserverDrop.cpp
 dom/InternalObserverFilter.cpp
+dom/InternalObserverFromScript.cpp
+dom/InternalObserverLast.cpp
 dom/InternalObserverMap.cpp
 dom/InternalObserverTake.cpp
-dom/InternalObserverDrop.cpp
 dom/KeyboardEvent.cpp
 dom/LiveNodeList.cpp
 dom/LoadableClassicScript.cpp
@@ -2052,6 +2054,7 @@ page/FrameTree.cpp
 page/History.cpp
 page/ImageAnalysisQueue.cpp
 page/ImageOverlayController.cpp
+page/IntelligenceTextEffectsSupport.cpp
 page/InteractionRegion.cpp
 page/IntersectionObserver.cpp
 page/IntersectionObserverEntry.cpp

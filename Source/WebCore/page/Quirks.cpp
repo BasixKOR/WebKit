@@ -336,7 +336,7 @@ bool Quirks::shouldDisableWritingSuggestionsByDefault() const
     return url.host() == "mail.google.com"_s;
 }
 
-void Quirks::updateStorageAccessUserAgentStringQuirks(UncheckedKeyHashMap<RegistrableDomain, String>&& userAgentStringQuirks)
+void Quirks::updateStorageAccessUserAgentStringQuirks(HashMap<RegistrableDomain, String>&& userAgentStringQuirks)
 {
     auto& quirks = updatableStorageAccessUserAgentStringQuirks();
     quirks.clear();
@@ -1877,5 +1877,14 @@ bool Quirks::shouldHideCoarsePointerCharacteristics() const
 
     return false;
 }
+
+#if ENABLE(TOUCH_EVENTS)
+
+bool Quirks::shouldOmitTouchEventDOMAttributesForDesktopWebsite(const URL& requestURL)
+{
+    return requestURL.host() == "secure.chase.com"_s;
+}
+
+#endif
 
 }

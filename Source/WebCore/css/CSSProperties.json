@@ -355,6 +355,7 @@
             ],
             "codegen-properties": {
                 "custom": "Value",
+                "getter": "writingMode().computedTextDirection",
                 "high-priority": true,
                 "parser-grammar": "<<values>>"
             },
@@ -1132,6 +1133,7 @@
             ],
             "codegen-properties": {
                 "custom": "Value",
+                "getter": "writingMode().computedTextOrientation",
                 "high-priority": true,
                 "parser-grammar": "<<values>>"
             },
@@ -1274,6 +1276,7 @@
                 ],
                 "custom": "Value",
                 "comment": "This is top priority because vi/vb units (depending on writing-mode) may be used by other properties",
+                "getter": "writingMode().computedWritingMode",
                 "top-priority": true,
                 "parser-grammar": "<<values>>"
             },
@@ -1557,11 +1560,13 @@
             }
         },
         "animation-range": {
+            "animatable": true,
             "codegen-properties": {
                 "longhands": [
                     "animation-range-start",
                     "animation-range-end"
                 ],
+                "separator": ",",
                 "settings-flag": "scrollDrivenAnimationsEnabled"
             },
             "specification": {
@@ -1570,8 +1575,10 @@
             }
         },
         "animation-range-start": {
+            "animatable": true,
             "codegen-properties": {
-                "converter": "AnimationRangeStart",
+                "separator": ",",
+                "name-for-methods": "RangeStart",
                 "parser-function": "consumeAnimationRangeStart",
                 "parser-grammar-unused": "[ normal | <length-percentage> | [ <custom-ident> || <length-percentage>?] ]#",
                 "parser-grammar-unused-reason": "Needs support for '||' groups.",
@@ -1583,8 +1590,10 @@
             }
         },
         "animation-range-end": {
+            "animatable": true,
             "codegen-properties": {
-                "converter": "AnimationRangeEnd",
+                "separator": ",",
+                "name-for-methods": "RangeEnd",
                 "parser-function": "consumeAnimationRangeEnd",
                 "parser-grammar-unused": "[ normal | <length-percentage> | [ <custom-ident> || <length-percentage>? ] ]#",
                 "parser-grammar-unused-reason": "Needs support for '||' groups.",
@@ -7284,7 +7293,11 @@
                 "start",
                 "end",
                 "self-start",
-                "self-end"
+                "self-end",
+                {
+                    "value": "anchor-center",
+                    "settings-flag": "cssAnchorPositioningEnabled"
+                }
             ],
             "codegen-properties": {
                 "aliases": [
@@ -7293,7 +7306,7 @@
                 "initial": "initialDefaultAlignment",
                 "converter": "SelfOrDefaultAlignmentData",
                 "parser-function": "consumeAlignItems",
-                "parser-grammar-unused": "normal | stretch | <baseline-position> | [ <overflow-position>? <self-position> ]",
+                "parser-grammar-unused": "normal | stretch | <baseline-position> | [ <overflow-position>? <self-position> ] | anchor-center",
                 "parser-grammar-unused-reason": "Needs support for ordered groups, '&&' groups and optionals.",
                 "comment": "Alternate definition in css-flexbox - flex-start | flex-end | center | baseline | stretch"
             },
@@ -7319,7 +7332,11 @@
                 "start",
                 "end",
                 "self-start",
-                "self-end"
+                "self-end",
+                {
+                    "value": "anchor-center",
+                    "settings-flag": "cssAnchorPositioningEnabled"
+                }
             ],
             "codegen-properties": {
                 "aliases": [
@@ -7328,7 +7345,7 @@
                 "initial": "initialSelfAlignment",
                 "converter": "SelfOrDefaultAlignmentData",
                 "parser-function": "consumeAlignSelf",
-                "parser-grammar-unused": "auto | normal | stretch | <baseline-position> | [ <overflow-position>? <self-position> ]",
+                "parser-grammar-unused": "auto | normal | stretch | <baseline-position> | [ <overflow-position>? <self-position> ] | anchor-center",
                 "parser-grammar-unused-reason": "Needs support for ordered groups, '&&' groups and optionals.",
                 "comment": "Alternate definition in css-flexbox - auto | flex-start | flex-end | center | baseline | stretch"
             },
@@ -7520,7 +7537,7 @@
                 "initial": "initialSelfAlignment",
                 "converter": "SelfOrDefaultAlignmentData",
                 "parser-function": "consumeJustifySelf",
-                "parser-grammar-unused": "auto | normal | stretch | <baseline-position> | [ <overflow-position>? [ <self-position> | left | right ] ]",
+                "parser-grammar-unused": "auto | normal | stretch | <baseline-position> | [ <overflow-position>? [ <self-position> | left | right ] ] | anchor-center",
                 "parser-grammar-unused-reason": "Needs support for ordered groups, '&&' groups and optionals."
             },
             "specification": {
@@ -7535,7 +7552,7 @@
                 ],
                 "converter": "SelfOrDefaultAlignmentData",
                 "parser-function": "consumeJustifyItems",
-                "parser-grammar-unused": "[ normal | stretch | <baseline-position> | [ <overflow-position>? [ <self-position> | left | right ] ] | legacy | legacy ] && [ left | right | center ]",
+                "parser-grammar-unused": "[ normal | stretch | anchor-center | <baseline-position> | [ <overflow-position>? [ <self-position> | left | right ] ] | legacy | legacy ] && [ left | right | center | anchor-center ]",
                 "parser-grammar-unused-reason": "Needs support for ordered groups, '&&' groups and optionals."
             },
             "specification": {

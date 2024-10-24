@@ -687,40 +687,43 @@ void WritingToolsController::writingToolsSessionDidReceiveAction<WritingTools::S
 
     auto& markers = document->markers();
 
-    markers.forEach<DocumentMarkerController::IterationDirection::Backwards>(sessionRange, { DocumentMarker::Type::WritingToolsTextSuggestion }, [&](auto& node, auto& marker) {
-        auto rangeToReplace = makeSimpleRange(node, marker);
+    auto newState = [&] {
+        switch (action) {
+        case WritingTools::Action::ShowOriginal:
+            return DocumentMarker::WritingToolsTextSuggestionData::State::Rejected;
+
+        case WritingTools::Action::ShowRewritten:
+            return DocumentMarker::WritingToolsTextSuggestionData::State::Accepted;
+
+        default:
+            ASSERT_NOT_REACHED();
+            return DocumentMarker::WritingToolsTextSuggestionData::State::Accepted;
+        }
+    }();
+
+    Vector<std::tuple<Ref<Node>, DocumentMarker::WritingToolsTextSuggestionData, unsigned, unsigned>> markerData;
+
+    markers.forEach(sessionRange, { DocumentMarker::Type::WritingToolsTextSuggestion }, [&](auto& node, auto& marker) {
+        auto data = std::get<DocumentMarker::WritingToolsTextSuggestionData>(marker.data());
+        markerData.append({ node, data, marker.startOffset(), marker.endOffset() });
+        return false;
+    });
+
+    markers.removeMarkers(sessionRange, { DocumentMarker::Type::WritingToolsTextSuggestion });
+
+    for (auto& [node, oldData, startOffset, endOffset] : markerData | std::views::reverse) {
+        auto rangeToReplace = SimpleRange { { node.get(), startOffset }, { node.get(), endOffset } };
 
         auto currentText = plainText(rangeToReplace);
-
-        auto oldData = std::get<DocumentMarker::WritingToolsTextSuggestionData>(marker.data());
         auto previousText = oldData.originalText;
-        auto offsetRange = OffsetRange { marker.startOffset(), marker.endOffset() };
-
-        markers.removeMarkers(node, offsetRange, { DocumentMarker::Type::WritingToolsTextSuggestion });
-
-        auto newState = [&] {
-            switch (action) {
-            case WritingTools::Action::ShowOriginal:
-                return DocumentMarker::WritingToolsTextSuggestionData::State::Rejected;
-
-            case WritingTools::Action::ShowRewritten:
-                return DocumentMarker::WritingToolsTextSuggestionData::State::Accepted;
-
-            default:
-                ASSERT_NOT_REACHED();
-                return DocumentMarker::WritingToolsTextSuggestionData::State::Accepted;
-            }
-        }();
 
         replaceContentsOfRangeInSession(*state, rangeToReplace, previousText);
 
-        auto newData = DocumentMarker::WritingToolsTextSuggestionData { currentText, oldData.suggestionID, newState };
-        auto newOffsetRange = OffsetRange { offsetRange.start, offsetRange.end + previousText.length() - currentText.length() };
+        auto newData = DocumentMarker::WritingToolsTextSuggestionData { currentText, oldData.suggestionID, newState, oldData.decoration };
+        auto newOffsetRange = OffsetRange { startOffset, endOffset + previousText.length() - currentText.length() };
 
         markers.addMarker(node, DocumentMarker { DocumentMarker::Type::WritingToolsTextSuggestion, newOffsetRange, WTFMove(newData) });
-
-        return false;
-    });
+    }
 }
 
 template<>
@@ -929,6 +932,11 @@ void WritingToolsController::respondToReappliedEditing(EditCommandComposition* c
     state->reappliedCommands.append(state->unappliedCommands.takeLast());
 }
 
+#pragma mark - Range-based methods.
+
+// FIXME: These methods should be refactored to not rely on WritingToolsController.
+// Maybe use an abstract class that yields a SimpleRange context range?
+
 #pragma mark - Private instance helper methods.
 
 std::optional<SimpleRange> WritingToolsController::activeSessionRange() const
@@ -942,6 +950,12 @@ std::optional<SimpleRange> WritingToolsController::activeSessionRange() const
 
 template<WritingTools::Session::Type Type>
 WritingToolsController::StateFromSessionType<Type>::Value* WritingToolsController::currentState()
+{
+    return std::get_if<typename WritingToolsController::StateFromSessionType<Type>::Value>(&m_state);
+}
+
+template<WritingTools::Session::Type Type>
+const WritingToolsController::StateFromSessionType<Type>::Value* WritingToolsController::currentState() const
 {
     return std::get_if<typename WritingToolsController::StateFromSessionType<Type>::Value>(&m_state);
 }

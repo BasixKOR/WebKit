@@ -4187,8 +4187,6 @@ LinearMediaPlayerEnabled:
     WebKitLegacy:
       default: false
     WebKit:
-      # FIXME: this line can be removed when WebKitSwift is available in Simulators (see rdar://125735304)
-      "PLATFORM(IOS_FAMILY_SIMULATOR)": false
       default: WebKit::defaultLinearMediaPlayerEnabled()
     WebCore:
       default: false
@@ -5293,8 +5291,6 @@ NotificationsEnabled:
       "PLATFORM(IOS_FAMILY)": false
       default: true
   disableInLockdownMode: true
-  sharedPreferenceForWebProcess: true
-  richJavaScript: true
 
 ObservableEnabled:
   type: bool
@@ -6970,6 +6966,21 @@ SpatialNavigationEnabled:
     WebCore:
       default: false
 
+SpatialVideoEnabled:
+  type: bool
+  status: preview
+  category: media
+  humanReadableName: "Spatial video playback enabled"
+  humanReadableDescription: "Spatial video playback enabled"
+  condition: ENABLE(LINEAR_MEDIA_PLAYER)
+  defaultValue:
+    WebKitLegacy:
+      default: false
+    WebKit:
+      default: false
+    WebCore:
+      default: false
+
 # FIXME: Is this implemented for WebKitLegacy? If not, this should be excluded from WebKitLegacy entirely.
 SpeakerSelectionRequiresUserGesture:
   type: bool
@@ -7380,11 +7391,11 @@ TiledScrollingIndicatorVisible:
     WebCore:
       default: false
 
-TouchEventsEnabled:
+TouchEventDOMAttributesEnabled:
   type: bool
   status: embedder
-  humanReadableName: "Touch Events"
-  humanReadableDescription: "Enable Touch Events"
+  humanReadableName: "Touch Event DOM Attributes"
+  humanReadableDescription: "Enable Touch Event DOM Attributes"
   condition: ENABLE(TOUCH_EVENTS)
   defaultValue:
     WebCore:

@@ -159,6 +159,9 @@ private:
     template<WritingTools::Session::Type Type>
     StateFromSessionType<Type>::Value* currentState();
 
+    template<WritingTools::Session::Type Type>
+    const StateFromSessionType<Type>::Value* currentState() const;
+
     std::optional<std::tuple<Node&, DocumentMarker&>> findTextSuggestionMarkerContainingRange(const SimpleRange&) const;
     std::optional<std::tuple<Node&, DocumentMarker&>> findTextSuggestionMarkerByID(const SimpleRange& outerRange, const WritingTools::TextSuggestion::ID&) const;
 

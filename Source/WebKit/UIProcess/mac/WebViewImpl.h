@@ -43,6 +43,7 @@
 #include <WebKit/WKDragDestinationAction.h>
 #include <WebKit/_WKOverlayScrollbarStyle.h>
 #include <pal/spi/cocoa/AVKitSPI.h>
+#include <pal/spi/cocoa/WritingToolsSPI.h>
 #include <wtf/BlockPtr.h>
 #include <wtf/CheckedPtr.h>
 #include <wtf/CompletionHandler.h>
@@ -196,7 +197,7 @@ enum class UndoOrRedo : bool;
 
 typedef id <NSValidatedUserInterfaceItem> ValidationItem;
 typedef Vector<RetainPtr<ValidationItem>> ValidationVector;
-typedef UncheckedKeyHashMap<String, ValidationVector> ValidationMap;
+typedef HashMap<String, ValidationVector> ValidationMap;
 
 class WebViewImpl final : public CanMakeWeakPtr<WebViewImpl>, public CanMakeCheckedPtr<WebViewImpl> {
     WTF_MAKE_NONCOPYABLE(WebViewImpl);
@@ -745,7 +746,7 @@ public:
 #endif
 
 #if ENABLE(WRITING_TOOLS)
-    void showWritingTools();
+    void showWritingTools(WTRequestedTool = WTRequestedToolIndex);
 
     void addTextAnimationForAnimationID(WTF::UUID, const WebCore::TextAnimationData&);
     void removeTextAnimationForAnimationID(WTF::UUID);
@@ -898,7 +899,7 @@ private:
     RetainPtr<WKFullScreenWindowController> m_fullScreenWindowController;
 #endif
 
-    UncheckedKeyHashMap<WebKit::PDFPluginIdentifier, RetainPtr<WKPDFHUDView>> _pdfHUDViews;
+    HashMap<WebKit::PDFPluginIdentifier, RetainPtr<WKPDFHUDView>> _pdfHUDViews;
 
     RetainPtr<WKShareSheet> _shareSheet;
 

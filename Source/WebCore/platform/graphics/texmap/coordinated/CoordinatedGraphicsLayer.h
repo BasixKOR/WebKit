@@ -164,7 +164,6 @@ public:
 
     Vector<std::pair<String, double>> acceleratedAnimationsForTesting(const Settings&) const final;
 
-    Ref<CoordinatedTileBuffer> paintTile(const IntRect&);
 #if USE(SKIA)
     void paintIntoGraphicsContext(GraphicsContext&, const IntRect&) const;
 #endif
@@ -172,6 +171,8 @@ public:
     float effectiveContentsScale() const;
 
     static void clampToContentsRectIfRectIsInfinite(FloatRect&, const FloatSize&);
+
+    Ref<CoordinatedTileBuffer> paintTile(const IntRect& dirtyRect);
 
 private:
     enum class FlushNotification {
@@ -250,9 +251,9 @@ private:
         Nicosia::CompositionLayer::LayerState::RepaintCounter repaintCounter;
         Nicosia::CompositionLayer::LayerState::DebugBorder debugBorder;
         bool performLayerSync { false };
+        RefPtr<Nicosia::BackingStore> backingStore;
     } m_nicosia;
 
-    std::unique_ptr<CoordinatedBackingStoreProxy> m_backingStore;
     RefPtr<CoordinatedAnimatedBackingStoreClient> m_animatedBackingStoreClient;
 
     RefPtr<NativeImage> m_pendingContentsImage;

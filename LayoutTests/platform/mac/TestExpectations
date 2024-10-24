@@ -248,6 +248,9 @@ fast/workers/worker-storagequota-query-usage.html
 fast/events/autoscroll-with-software-keyboard.html [ Skip ]
 fast/events/autoscroll-when-input-is-offscreen.html [ Skip ]
 
+# HTTP 204 (No Content) should be ignored
+webkit.org/b/60206 http/tests/navigation/response204.html
+
 # JSC does not support setIsolatedWorldSecurityOrigin
 webkit.org/b/61540 http/tests/security/isolatedWorld/cross-origin-xhr.html
 
@@ -2442,6 +2445,3 @@ webanimations/scroll-timeline-clamped-current-time-while-rubber-banding-mac.html
 
 # webkit.org/b/281765 PROGRESSION (285251@main): [ macOS iOS ] imported/w3c/web-platform-tests/navigation-api/navigate-event/cross-origin-traversal-redirect.html is a constant failure. 
 imported/w3c/web-platform-tests/navigation-api/navigate-event/cross-origin-traversal-redirect.html [ Skip ]
-
-# webkit.org/b/281765 REGRESSION(285504@main): [ macOS ] imported/w3c/web-platform-tests/scroll-animations/css/animation-timeline-ignored.tentative.html is a constant failure. 
-imported/w3c/web-platform-tests/scroll-animations/css/animation-timeline-ignored.tentative.html [ Failure ]

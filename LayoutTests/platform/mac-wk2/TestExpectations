@@ -1889,9 +1889,6 @@ tiled-drawing/tile-size-slow-zoomed.html [ Pass Failure ]
 # webkit.org/b/281090 REGRESSION(284131@main?):[ macOS wk2 x86_64  ] http/tests/site-isolation/selection-focus.html is a constant ImageOnlyFailure 
 [ x86_64 ] http/tests/site-isolation/selection-focus.html [ ImageOnlyFailure ]
 
-# webkit.org/b/281089 REGRESSION(284750@main): [macOS iOS Debug] ASSERTION FAILED: !child->frameID() in http/tests/site-isolation/draw-after-cross-origin-navigation-between-two-remote-frames.html
-[ Debug ] http/tests/site-isolation/draw-after-cross-origin-navigation-between-two-remote-frames.html [ Pass Timeout ImageOnlyFailure ]
-
 # webkit.org/b/281267 [ macOS wk2 ] imported/w3c/web-platform-tests/html/semantics/interactive-elements/the-summary-element/interactive-content.html is a flaky failure.
 imported/w3c/web-platform-tests/html/semantics/interactive-elements/the-summary-element/interactive-content.html [ Pass Failure ]
 
@@ -1906,3 +1903,29 @@ imported/w3c/web-platform-tests/html/cross-origin-opener-policy/tentative/noopen
 
 # webkit.org/b/281840 [ Ventura wk2 ] imported/w3c/web-platform-tests/navigation-api/navigate-event/navigation-traverseTo-same-document-preventDefault-multiple-windows.html is a flaky failure.
 [ Ventura ] imported/w3c/web-platform-tests/navigation-api/navigate-event/navigation-traverseTo-same-document-preventDefault-multiple-windows.html [ Pass Failure ]
+
+# webkit.org/b/281923 [ Sequoia wk2 Debug arm64 ] 3 tests in http/tests/cookies/same-site are constant failure (failure in EWS)
+[ Sequoia+ Debug arm64 ] http/tests/cookies/same-site/fetch-after-navigating-iframe-in-cross-origin-page.html [ Failure ]
+[ Sequoia+ Debug arm64 ] http/tests/cookies/same-site/fetch-in-cross-origin-service-worker.html [ Failure ]
+[ Sequoia+ Debug arm64 ] http/tests/cookies/same-site/popup-cross-site-post.html [ Failure ]
+
+# webkit.org/b/281939 [Sequoia] svg/stroke/non-scaling-stroke-gradient-text.html is a constant image failure
+[ Sequoia ] svg/stroke/non-scaling-stroke-gradient-text.html [ ImageOnlyFailure ]
+
+# webkit.org/b/281984 [ SequoiaA wk2 Debug arm64 ] 2x imported/w3c/web-platform-tests/html/anonymous-iframe/* are constant failures. 
+[ Sequoia+ Debug arm64 ] imported/w3c/web-platform-tests/html/cross-origin-embedder-policy/anonymous-iframe/cookie.tentative.https.window.html [ Failure ]
+[ Sequoia+ Debug arm64 ] imported/w3c/web-platform-tests/html/anonymous-iframe/cookie.tentative.https.window.html [ Failure ]
+
+# webkit.org/b/281999 REGRESSION (285061@main): [macOS Debug arm64 ] ASSERTION FAILED: m_lastEnqueuedRawVideoFrame <= sampleTime in http/wpt/mediarecorder/paus e-recording.html (EWS failure)
+[ Debug arm64 ] http/wpt/mediarecorder/pause-recording.html [ Skip ]
+
+# webkit.org/b/282003 REGRESSION(285507@main?): [ macOS iOS Debug ] ASSERTION FAILED: showCount == hideCount in virtual WebCore::MockPaymentCoordinator result of crash in ApplePay
+[ Debug ] http/tests/ssl/applepay/ApplePayRequestShippingContactV3.https.html [ Skip ]
+[ Debug ] http/tests/ssl/applepay/ApplePayShippingAddressChangeEventErrors.https.html [ Skip ]
+[ Debug ] http/tests/ssl/applepay/ApplePayRequestShippingContact.https.html [ Skip ]
+[ Debug ] http/tests/paymentrequest/ApplePayModifier-multiTokenContexts.https.html [ Skip ]
+[ Debug ] http/tests/paymentrequest/payment-response-complete-method.https.html [ Skip ]
+[ Debug ] http/tests/paymentrequest/payment-response-payerEmail-attribute.https.html [ Skip ]
+[ Debug ] http/tests/paymentrequest/ApplePayModifier-deferredPaymentRequest.https.html [ Skip ]
+[ Debug ] http/tests/paymentrequest/payment-response-methodName-attribute.https.html [ Skip ]
+[ Debug ] http/tests/paymentrequest/updateWith-displayItems.https.html [ Skip ]

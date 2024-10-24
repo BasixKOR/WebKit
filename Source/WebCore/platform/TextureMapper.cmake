@@ -63,6 +63,7 @@ if (USE_COORDINATED_GRAPHICS)
         platform/graphics/texmap/coordinated/CoordinatedAnimatedBackingStoreClient.h
         platform/graphics/texmap/coordinated/CoordinatedBackingStore.h
         platform/graphics/texmap/coordinated/CoordinatedBackingStoreProxy.h
+        platform/graphics/texmap/coordinated/CoordinatedBackingStoreProxyClient.h
         platform/graphics/texmap/coordinated/CoordinatedBackingStoreTile.h
         platform/graphics/texmap/coordinated/CoordinatedGraphicsLayer.h
         platform/graphics/texmap/coordinated/CoordinatedImageBackingStore.h
@@ -121,6 +122,7 @@ if (USE_NICOSIA)
         page/scrolling/nicosia/ScrollingTreeFixedNodeNicosia.h
         page/scrolling/nicosia/ScrollingTreeStickyNodeNicosia.h
 
+        platform/graphics/nicosia/NicosiaBackingStore.h
         platform/graphics/nicosia/NicosiaCompositionLayer.h
         platform/graphics/nicosia/NicosiaPlatformLayer.h
         platform/graphics/nicosia/NicosiaScene.h

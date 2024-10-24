@@ -199,11 +199,7 @@ RefPtr<WebProcessProxy> WebProcessProxy::processForIdentifier(ProcessIdentifier 
 
 RefPtr<WebProcessProxy> WebProcessProxy::processForConnection(const IPC::Connection& connection)
 {
-    for (Ref webProcessProxy : allProcesses()) {
-        if (webProcessProxy->hasConnection(connection))
-            return webProcessProxy.ptr();
-    }
-    return nullptr;
+    return dynamicDowncast<WebProcessProxy>(AuxiliaryProcessProxy::fromConnection(connection));
 }
 
 auto WebProcessProxy::globalPageMap() -> WebPageProxyMap&
@@ -936,6 +932,15 @@ void WebProcessProxy::didDestroyWebUserContentControllerProxy(WebUserContentCont
     m_webUserContentControllerProxies.remove(proxy);
 }
 
+static bool networkProcessWillCheckBlobFileAccess()
+{
+#if PLATFORM(COCOA)
+    return WTF::linkedOnOrAfterSDKWithBehavior(SDKAlignedBehavior::BlobFileAccessEnforcement);
+#else
+    return true;
+#endif
+}
+
 void WebProcessProxy::assumeReadAccessToBaseURL(WebPageProxy& page, const String& urlString, CompletionHandler<void()>&& completionHandler, bool directoryOnly)
 {
     URL url { urlString };
@@ -961,6 +966,10 @@ void WebProcessProxy::assumeReadAccessToBaseURL(WebPageProxy& page, const String
         weakPage->addPreviouslyVisitedPath(path);
         completionHandler();
     };
+
+    if (!networkProcessWillCheckBlobFileAccess())
+        return afterAllowAccess();
+
     if (directoryOnly)
         afterAllowAccess();
     else
@@ -986,6 +995,9 @@ void WebProcessProxy::assumeReadAccessToBaseURLs(WebPageProxy& page, const Vecto
         paths.append(path);
     }
     if (!paths.size())
+        return completionHandler();
+
+    if (!networkProcessWillCheckBlobFileAccess())
         return completionHandler();
 
     dataStore->protectedNetworkProcess()->sendWithAsyncReply(Messages::NetworkProcess::AllowFilesAccessFromWebProcess(coreProcessIdentifier(), WTFMove(paths)), [weakThis = WeakPtr { *this }, weakPage = WeakPtr { page }, paths, completionHandler = WTFMove(completionHandler)] mutable {

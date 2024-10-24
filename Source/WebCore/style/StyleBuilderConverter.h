@@ -82,6 +82,7 @@
 #include "StyleTextEdge.h"
 #include "TabSize.h"
 #include "TextSpacing.h"
+#include "TimelineRange.h"
 #include "TouchAction.h"
 #include "TransformOperationsBuilder.h"
 #include "ViewTimeline.h"
@@ -242,10 +243,6 @@ public:
     static RefPtr<TimingFunction> convertTimingFunction(const BuilderState&, const CSSValue&);
 
     static TimelineScope convertTimelineScope(const BuilderState&, const CSSValue&);
-
-    static SingleTimelineRange convertAnimationRange(const BuilderState&, const CSSValue&, SingleTimelineRange::Type);
-    static SingleTimelineRange convertAnimationRangeStart(const BuilderState&, const CSSValue&);
-    static SingleTimelineRange convertAnimationRangeEnd(const BuilderState&, const CSSValue&);
 
 private:
     friend class BuilderCustom;
@@ -716,9 +713,9 @@ inline TextAlignMode BuilderConverter::convertTextAlign(const BuilderState& buil
         if (element && element == builderState.document().documentElement())
             return TextAlignMode::Start;
         if (parentStyle.textAlign() == TextAlignMode::Start)
-            return parentStyle.isLeftToRightDirection() ? TextAlignMode::Left : TextAlignMode::Right;
+            return parentStyle.writingMode().isBidiLTR() ? TextAlignMode::Left : TextAlignMode::Right;
         if (parentStyle.textAlign() == TextAlignMode::End)
-            return parentStyle.isLeftToRightDirection() ? TextAlignMode::Right : TextAlignMode::Left;
+            return parentStyle.writingMode().isBidiLTR() ? TextAlignMode::Right : TextAlignMode::Left;
 
         return parentStyle.textAlign();
     }
@@ -736,9 +733,9 @@ inline TextAlignLast BuilderConverter::convertTextAlignLast(const BuilderState& 
 
     auto& parentStyle = builderState.parentStyle();
     if (parentStyle.textAlignLast() == TextAlignLast::Start)
-        return parentStyle.isLeftToRightDirection() ? TextAlignLast::Left : TextAlignLast::Right;
+        return parentStyle.writingMode().isBidiLTR() ? TextAlignLast::Left : TextAlignLast::Right;
     if (parentStyle.textAlignLast() == TextAlignLast::End)
-        return parentStyle.isLeftToRightDirection() ? TextAlignLast::Right : TextAlignLast::Left;
+        return parentStyle.writingMode().isBidiLTR() ? TextAlignLast::Right : TextAlignLast::Left;
     return parentStyle.textAlignLast();
 }
 
@@ -2213,37 +2210,6 @@ inline TimelineScope BuilderConverter::convertTimelineScope(const BuilderState&,
     return { TimelineScope::Type::Ident, WTF::map(*list, [&](auto& item) {
         return AtomString { downcast<CSSPrimitiveValue>(item).stringValue() };
     }) };
-}
-
-inline SingleTimelineRange BuilderConverter::convertAnimationRange(const BuilderState& state, const CSSValue& value, SingleTimelineRange::Type type)
-{
-    if (RefPtr primitiveValue = dynamicDowncast<CSSPrimitiveValue>(value)) {
-        if (SingleTimelineRange::isOffsetValue(*primitiveValue)) {
-            // <length-percentage>
-            return { SingleTimelineRange::Name::Omitted, convertLength(state, *primitiveValue) };
-        }
-        // <timeline-range-name> or Normal
-        return { SingleTimelineRange::timelineName(primitiveValue->valueID()), (type == SingleTimelineRange::Type::Start ? WebCore::Length(0, LengthType::Percent) : WebCore::Length(100, LengthType::Percent)) };
-    }
-    RefPtr pair = dynamicDowncast<CSSValuePair>(value);
-    if (!pair)
-        return { };
-
-    // <timeline-range-name> <length-percentage>
-    auto& primitiveValue = downcast<CSSPrimitiveValue>(pair->second());
-    ASSERT(SingleTimelineRange::isOffsetValue(primitiveValue));
-
-    return { SingleTimelineRange::timelineName(pair->first().valueID()), convertLength(state, primitiveValue) };
-}
-
-inline SingleTimelineRange BuilderConverter::convertAnimationRangeStart(const BuilderState& state, const CSSValue& value)
-{
-    return convertAnimationRange(state, value, SingleTimelineRange::Type::Start);
-}
-
-inline SingleTimelineRange BuilderConverter::convertAnimationRangeEnd(const BuilderState& state, const CSSValue& value)
-{
-    return convertAnimationRange(state, value, SingleTimelineRange::Type::End);
 }
 
 } // namespace Style
