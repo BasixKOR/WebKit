@@ -1328,7 +1328,7 @@ void WebProcessProxy::processDidTerminateOrFailedToLaunch(ProcessTerminationReas
         page->dispatchProcessDidTerminate(*this, reason);
 
     for (Ref remotePage : m_remotePages)
-        remotePage->processDidTerminate(coreProcessIdentifier());
+        remotePage->processDidTerminate(*this, reason);
 }
 
 void WebProcessProxy::didReceiveInvalidMessage(IPC::Connection& connection, IPC::MessageName messageName, int32_t indexOfObjectFailingDecoding)

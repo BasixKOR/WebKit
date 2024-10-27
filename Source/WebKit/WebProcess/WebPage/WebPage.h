@@ -582,6 +582,7 @@ public:
     void didFinishDocumentLoad(WebFrame&);
     void didFinishLoad(WebFrame&);
     void didSameDocumentNavigationForFrame(WebFrame&);
+    void didNavigateWithinPageForFrame(WebFrame&);
     void show();
     String userAgent(const URL&) const;
     String platformUserAgent(const URL&) const;
@@ -695,7 +696,6 @@ public:
     Ref<API::Array> trackedRepaintRects();
 
     void executeEditingCommand(const String& commandName, const String& argument);
-    void clearMainFrameName();
     void sendClose();
 
     void suspendForProcessSwap();

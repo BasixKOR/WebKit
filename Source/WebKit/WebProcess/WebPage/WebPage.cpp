@@ -1836,12 +1836,6 @@ void WebPage::setBaseWritingDirection(WritingDirection direction)
 
     frame->editor().setBaseWritingDirection(direction);
 }
-    
-void WebPage::clearMainFrameName()
-{
-    if (auto* frame = mainFrame())
-        frame->tree().clearName();
-}
 
 void WebPage::enterAcceleratedCompositingMode(WebCore::Frame& frame, GraphicsLayer* layer)
 {
@@ -7867,6 +7861,12 @@ void WebPage::didSameDocumentNavigationForFrame(WebFrame& frame)
     for (auto& pluginView : m_pluginViews)
         pluginView.didSameDocumentNavigationForFrame(frame);
 #endif
+}
+
+void WebPage::didNavigateWithinPageForFrame(WebFrame& frame)
+{
+    if (frame.isMainFrame())
+        m_pendingNavigationID = std::nullopt;
 }
 
 void WebPage::testProcessIncomingSyncMessagesWhenWaitingForSyncReply(CompletionHandler<void(bool)>&& reply)
