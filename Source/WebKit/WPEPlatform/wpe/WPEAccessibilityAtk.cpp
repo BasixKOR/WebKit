@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Igalia S.L.
+ * Copyright (C) 2025 Igalia S.L.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,42 +23,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WPEDisplayDRM_h
-#define WPEDisplayDRM_h
+#include "config.h"
+#include "WPEAccessibilityAtk.h"
 
-#if !defined(__WPE_DRM_H_INSIDE__) && !defined(BUILDING_WEBKIT)
-#error "Only <wpe/drm/wpe-drm.h> can be included directly."
-#endif
+#if USE(ATK)
+#include "WPEApplicationAccessibleAtk.h"
+#include <atk-bridge.h>
+#include <mutex>
 
-#include <gbm.h>
-#include <glib-object.h>
-#include <wpe/wpe-platform.h>
-#include <xf86drmMode.h>
+namespace WPE {
 
-G_BEGIN_DECLS
+static void initializeAtkUtil()
+{
+    auto* atkUtilClass = ATK_UTIL_CLASS(g_type_class_ref(ATK_TYPE_UTIL));
+    if (atkUtilClass->get_root)
+        return;
 
-/**
- * WPE_SETTING_DRM_SCALE:
- *
- * The scale size of the DRM screen.
- *
- * VariantType: double
- *
- * Default: 1.0
- */
-#define WPE_SETTING_DRM_SCALE "/wpe-platform/drm/scale"
+    atkUtilClass->get_root = []() -> AtkObject* {
+        static AtkObject* accessible = nullptr;
+        if (!accessible)
+            accessible = wpeApplicationAccessibleAtkNew();
+        return accessible;
+    };
 
-#define WPE_TYPE_DISPLAY_DRM (wpe_display_drm_get_type())
-WPE_API G_DECLARE_FINAL_TYPE (WPEDisplayDRM, wpe_display_drm, WPE, DISPLAY_DRM, WPEDisplay)
+    atkUtilClass->get_toolkit_name = []() -> const gchar* {
+        return "WPEPlatform";
+    };
 
-WPE_API WPEDisplay         *wpe_display_drm_new                (void);
-WPE_API gboolean            wpe_display_drm_connect            (WPEDisplayDRM *display,
-                                                                const char    *name,
-                                                                GError       **error);
-WPE_API struct gbm_device  *wpe_display_drm_get_device         (WPEDisplayDRM *display);
-WPE_API gboolean            wpe_display_drm_supports_atomic    (WPEDisplayDRM *display);
-WPE_API gboolean            wpe_display_drm_supports_modifiers (WPEDisplayDRM *display);
+    atkUtilClass->get_toolkit_version = []() -> const gchar* {
+        return "";
+    };
 
-G_END_DECLS
+    atk_bridge_adaptor_init(nullptr, nullptr);
+}
 
-#endif /* WPEDisplayDRM_h */
+void accessibilityAtkInit()
+{
+    static std::once_flag onceFlag;
+    std::call_once(onceFlag, [] {
+        initializeAtkUtil();
+    });
+}
+
+} // namespace WPE
+
+#endif // USE(ATK)

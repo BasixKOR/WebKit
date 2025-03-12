@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Igalia S.L.
+ * Copyright (C) 2025 Igalia S.L.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,42 +23,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WPEDisplayDRM_h
-#define WPEDisplayDRM_h
+#pragma once
 
-#if !defined(__WPE_DRM_H_INSIDE__) && !defined(BUILDING_WEBKIT)
-#error "Only <wpe/drm/wpe-drm.h> can be included directly."
-#endif
-
-#include <gbm.h>
+#if USE(ATK)
+#include <atk/atk.h>
 #include <glib-object.h>
-#include <wpe/wpe-platform.h>
-#include <xf86drmMode.h>
+#include <wpe/WPEToplevel.h>
 
 G_BEGIN_DECLS
 
-/**
- * WPE_SETTING_DRM_SCALE:
- *
- * The scale size of the DRM screen.
- *
- * VariantType: double
- *
- * Default: 1.0
- */
-#define WPE_SETTING_DRM_SCALE "/wpe-platform/drm/scale"
+#define WPE_TYPE_TOPLEVEL_ACCESSIBLE_ATK (wpe_toplevel_accessible_atk_get_type())
+G_DECLARE_FINAL_TYPE (WPEToplevelAccessibleAtk, wpe_toplevel_accessible_atk, WPE, TOPLEVEL_ACCESSIBLE_ATK, AtkObject)
 
-#define WPE_TYPE_DISPLAY_DRM (wpe_display_drm_get_type())
-WPE_API G_DECLARE_FINAL_TYPE (WPEDisplayDRM, wpe_display_drm, WPE, DISPLAY_DRM, WPEDisplay)
-
-WPE_API WPEDisplay         *wpe_display_drm_new                (void);
-WPE_API gboolean            wpe_display_drm_connect            (WPEDisplayDRM *display,
-                                                                const char    *name,
-                                                                GError       **error);
-WPE_API struct gbm_device  *wpe_display_drm_get_device         (WPEDisplayDRM *display);
-WPE_API gboolean            wpe_display_drm_supports_atomic    (WPEDisplayDRM *display);
-WPE_API gboolean            wpe_display_drm_supports_modifiers (WPEDisplayDRM *display);
+AtkObject* wpeToplevelAccessibleAtkNew(WPEToplevel*);
 
 G_END_DECLS
 
-#endif /* WPEDisplayDRM_h */
+#endif // USE(ATK)
