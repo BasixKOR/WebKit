@@ -17,6 +17,7 @@ set(test_main_SOURCES gtk/main.cpp)
 list(APPEND TestWTF_SOURCES
     ${test_main_SOURCES}
 
+    Tests/WTF/glib/ActivityObserver.cpp
     Tests/WTF/glib/GRefPtr.cpp
     Tests/WTF/glib/GUniquePtr.cpp
     Tests/WTF/glib/GWeakPtr.cpp
@@ -48,6 +49,7 @@ list(APPEND TestWebCore_SOURCES
 
     Tests/WebCore/glib/Damage.cpp
     Tests/WebCore/glib/GraphicsContextGLTextureMapper.cpp
+    Tests/WebCore/glib/RunLoopObserver.cpp
 
     Tests/WebCore/gstreamer/GStreamerTest.cpp
     Tests/WebCore/gstreamer/GstElementHarness.cpp

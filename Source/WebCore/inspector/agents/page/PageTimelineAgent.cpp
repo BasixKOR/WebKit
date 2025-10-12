@@ -129,7 +129,7 @@ void PageTimelineAgent::internalStart(std::optional<int>&& maxCallStackDepth)
 
     m_runLoopNestingLevel = 1;
 #elif USE(GLIB_EVENT_LOOP)
-    m_runLoopObserver = makeUnique<RunLoop::Observer>([this](RunLoop::Event event, const String& name) {
+    m_runLoopObserver = makeUnique<RunLoop::EventObserver>([this](RunLoop::Event event, const String& name) {
         if (!tracking() || m_environment.debugger()->isPaused())
             return;
 
@@ -144,7 +144,7 @@ void PageTimelineAgent::internalStart(std::optional<int>&& maxCallStackDepth)
             break;
         }
     });
-    RunLoop::currentSingleton().observe(*m_runLoopObserver);
+    RunLoop::currentSingleton().observeEvent(*m_runLoopObserver);
 #endif
 
     InspectorTimelineAgent::internalStart(WTFMove(maxCallStackDepth));
