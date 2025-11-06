@@ -622,7 +622,7 @@ protected:
     void postPlatformAnnouncementNotification(const String&) { }
 #endif
 
-    void frameLoadingEventPlatformNotification(AccessibilityObject*, AXLoadingEvent);
+    void frameLoadingEventPlatformNotification(RenderView*, AXLoadingEvent);
     void handleLabelChanged(AccessibilityObject*);
 
     // CharacterOffset functions.

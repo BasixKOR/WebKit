@@ -30,6 +30,7 @@
 #include "RemoteAnimationTimeline.h"
 #include <WebCore/AcceleratedEffect.h>
 #include <WebCore/WebAnimationTime.h>
+#include <wtf/JSONValues.h>
 #include <wtf/RefCounted.h>
 #include <wtf/TZoneMalloc.h>
 
@@ -46,6 +47,8 @@ public:
     const Vector<WebCore::AcceleratedEffect::Keyframe>& keyframes() const { return m_effect->keyframes(); }
 
     void apply(WebCore::AcceleratedEffectValues&);
+
+    Ref<JSON::Object> toJSONForTesting() const;
 
 private:
     RemoteAnimation(const WebCore::AcceleratedEffect&, const RemoteAnimationTimeline&);

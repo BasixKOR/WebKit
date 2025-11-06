@@ -551,4 +551,11 @@ void UIScriptControllerCocoa::setObscuredInsets(double top, double right, double
     [webView() setObscuredContentInsets:insets];
 }
 
+#if ENABLE(THREADED_ANIMATIONS)
+JSRetainPtr<JSStringRef> UIScriptControllerCocoa::animationStackForLayerWithID(uint64_t layerID) const
+{
+    return adopt(JSStringCreateWithCFString((CFStringRef) [webView() _animationStackForLayerWithID:layerID]));
+}
+#endif
+
 } // namespace WTR

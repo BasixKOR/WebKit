@@ -132,8 +132,6 @@ WK_ENABLE_SWIFTUI[sdk=appletv*] = NO;
 WK_ENABLE_SWIFTUI[sdk=xros2.*] = NO;
 WK_ENABLE_SWIFTUI[sdk=xrsimulator2.*] = NO;
 
-OTHER_CPLUSPLUSFLAGS = $(inherited) -isystem $(SDKROOT)/System/Library/Frameworks/System.framework/PrivateHeaders;
-
 SUPPORTS_TEXT_BASED_API = $(SUPPORTS_TEXT_BASED_API_$(OVERRIDE_SUPPORTS_TEXT_BASED_API));
 SUPPORTS_TEXT_BASED_API_ = $(TAPI_USE_SRCROOT);
 SUPPORTS_TEXT_BASED_API_[sdk=iphone*] = YES;

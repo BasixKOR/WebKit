@@ -61,7 +61,7 @@ public:
     using FormattingContextLayoutFunction = Function<void(const ElementBox&, std::optional<LayoutUnit>, std::optional<LayoutUnit>, LayoutState&)>;
     using FormattingContextLogicalWidthFunction = Function<LayoutUnit(const ElementBox&, LayoutIntegration::LogicalWidthType)>;
     using FormattingContextLogicalHeightFunction = Function<LayoutUnit(const ElementBox&, LayoutIntegration::LogicalHeightType)>;
-    using FormattingContextLayoutForBlockInInlineFunction = Function<void(const ElementBox&, BlockLayoutState&, LayoutState&)>;
+    using FormattingContextLayoutForBlockInInlineFunction = Function<void(const ElementBox&, LayoutPoint, BlockLayoutState&, LayoutState&)>;
 
     LayoutState(const Document&, const ElementBox& rootContainer, Type, FormattingContextLayoutFunction&&, FormattingContextLogicalWidthFunction&&, FormattingContextLogicalHeightFunction&&, FormattingContextLayoutForBlockInInlineFunction&&);
     ~LayoutState();
@@ -110,7 +110,7 @@ public:
     void layoutWithFormattingContextForBox(const ElementBox&, std::optional<LayoutUnit> widthConstraint, std::optional<LayoutUnit> heightConstraint) const;
     LayoutUnit logicalWidthWithFormattingContextForBox(const ElementBox&, LayoutIntegration::LogicalWidthType) const;
     LayoutUnit logicalHeightWithFormattingContextForBox(const ElementBox&, LayoutIntegration::LogicalHeightType) const;
-    void layoutWithFormattingContextForBlockInInline(const Layout::ElementBox& block, const BlockLayoutState&) const;
+    void layoutWithFormattingContextForBlockInInline(const Layout::ElementBox& block, LayoutPoint blockLogicalTopLeft, const BlockLayoutState&) const;
 
 private:
     void setQuirksMode(QuirksMode quirksMode) { m_quirksMode = quirksMode; }

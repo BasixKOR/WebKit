@@ -887,6 +887,12 @@ RefPtr<const RemoteAnimationTimeline> RemoteLayerTreeDrawingAreaProxy::timeline(
         return page->checkedScrollingCoordinatorProxy()->timeline(timelineID);
     return nullptr;
 }
+
+RefPtr<const RemoteAnimationStack> RemoteLayerTreeDrawingAreaProxy::animationStackForNodeWithIDForTesting(WebCore::PlatformLayerIdentifier layerID) const
+{
+    return m_remoteLayerTreeHost->animationStackForNodeWithIDForTesting(layerID);
+}
+
 #endif // ENABLE(THREADED_ANIMATIONS)
 
 } // namespace WebKit

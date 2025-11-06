@@ -29,6 +29,7 @@
 #if USE(LIBWEBRTC)
 
 #import <WebCore/RegistrableDomain.h>
+#import <pal/spi/cocoa/NetworkSPI.h>
 #import <wtf/SoftLinking.h>
 #import <wtf/cocoa/TypeCastsCocoa.h>
 #import <wtf/text/WTFString.h>

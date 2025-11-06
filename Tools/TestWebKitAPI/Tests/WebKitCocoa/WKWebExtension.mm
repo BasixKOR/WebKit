@@ -242,10 +242,7 @@ TEST(WKWebExtension, MultipleIconSizes)
 
     auto screenScale = 1.0;
 #if PLATFORM(IOS_FAMILY)
-ALLOW_DEPRECATED_DECLARATIONS_BEGIN
-    // FIXME: <rdar://155548417> ([ Build-Failure ] [ iOS26+ ] error: 'mainScreen' is deprecated: first deprecated in iOS 26.0)
-    screenScale = UIScreen.mainScreen.scale;
-ALLOW_DEPRECATED_DECLARATIONS_END
+    screenScale = UITraitCollection.currentTraitCollection.displayScale;
 #else
     screenScale = NSScreen.mainScreen.backingScaleFactor;
 #endif

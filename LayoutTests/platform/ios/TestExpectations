@@ -8298,9 +8298,6 @@ fast/html/details-open4.html [ Pass Failure ]
 fast/html/details-replace-summary-child.html [ Pass Failure ]
 fast/html/details-replace-text.html [ Pass Failure ]
 
-# https://bugs.webkit.org/show_bug.cgi?id=301133 [ iOS 26 ] editing/input/cocoa/writing-suggestions-textarea-multiple-lines.html is a constant text failure 
-editing/input/cocoa/writing-suggestions-textarea-multiple-lines.html [ Pass Failure ]
-
 # https://bugs.webkit.org/show_bug.cgi?id=301173 [ iOS 26 ] fast/text/international/hindi-spacing.html is a constant text failure
 fast/text/international/hindi-spacing.html [ Pass Failure ]
 
@@ -8370,4 +8367,4 @@ fast/forms/ios/focus-long-textarea.html [ Failure ]
 fast/forms/ios/zoom-after-input-tap-wide-input.html [ Failure ]
 fast/forms/ios/zoom-after-input-tap.html [ Failure ]
 
-webkit.org/b/301957 fast/events/ios/do-not-show-keyboard-when-focusing-after-blur.html [ Failure ]
+webkit.org/b/302104 fast/scrolling/ios/bounding-client-rect-on-fixed.html [ Pass Failure ]

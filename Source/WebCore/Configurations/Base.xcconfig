@@ -108,8 +108,6 @@ STRIP_INSTALLED_PRODUCT[config=Debug] = NO;
 SDKROOT = macosx.internal;
 ADDITIONAL_SDKS = $(WK_ADDITIONAL_SDKS);
 
-OTHER_CPLUSPLUSFLAGS = $(inherited) -isystem $(SDKROOT)/System/Library/Frameworks/System.framework/PrivateHeaders;
-
 // This is required to make LLVM_TARGET_TRIPLE_SUFFIX propagate into scripts.
 LLVM_TARGET_TRIPLE_SUFFIX = $(inherited);
 

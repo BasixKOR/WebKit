@@ -468,6 +468,11 @@ public:
     virtual bool didCallEnsurePositionInformationIsUpToDateSinceLastCheck() const { notImplemented(); return false; }
     virtual void clearEnsurePositionInformationIsUpToDateTracking() { notImplemented(); }
 
+#if ENABLE(THREADED_ANIMATIONS)
+    // Animations
+    virtual JSRetainPtr<JSStringRef> animationStackForLayerWithID(uint64_t) const { notImplemented(); return nullptr; }
+#endif
+
 protected:
     explicit UIScriptController(UIScriptContext&);
     

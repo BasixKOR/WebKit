@@ -81,6 +81,10 @@
 #import "ModelProcessProxy.h"
 #endif
 
+#if ENABLE(THREADED_ANIMATIONS)
+#import "RemoteAnimationStack.h"
+#endif
+
 #if ENABLE(MEDIA_SESSION_COORDINATOR)
 @interface WKMediaSessionCoordinatorHelper : NSObject <_WKMediaSessionCoordinatorDelegate>
 - (id)initWithCoordinator:(WebCore::MediaSessionCoordinatorClient*)coordinator;
@@ -1169,6 +1173,25 @@ static void dumpCALayer(TextStream& ts, CALayer *layer, bool traverse)
 #endif
     return @"standard";
 }
+
+#if ENABLE(THREADED_ANIMATIONS)
+- (NSString *)_animationStackForLayerWithID:(unsigned long long)layerID
+{
+    auto animationStack = [&] -> RefPtr<const WebKit::RemoteAnimationStack> {
+        if (!layerID)
+            return nullptr;
+        WebCore::PlatformLayerIdentifier platformLayerID { ObjectIdentifier<WebCore::PlatformLayerIdentifierType>(layerID), _page->legacyMainFrameProcess().coreProcessIdentifier() };
+        if (RefPtr nodeStack = downcast<WebKit::RemoteLayerTreeDrawingAreaProxy>(_page->protectedDrawingArea())->animationStackForNodeWithIDForTesting(platformLayerID))
+            return nodeStack;
+        if (CheckedPtr scrollingCoordinator = _page->scrollingCoordinatorProxy())
+            return scrollingCoordinator->animationStackForNodeWithIDForTesting(platformLayerID);
+        return nullptr;
+    }();
+    if (animationStack)
+        return animationStack->toJSONForTesting()->toJSONString().createNSString().autorelease();
+    return @"";
+}
+#endif
 
 @end
 

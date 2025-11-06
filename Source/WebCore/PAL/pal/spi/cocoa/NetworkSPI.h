@@ -32,6 +32,7 @@ DECLARE_SYSTEM_HEADER
 #if USE(APPLE_INTERNAL_SDK)
 
 #import <nw/private.h>
+#import <sys/socket_private.h>
 
 #if PLATFORM(MAC) && defined(__OBJC__)
 // Only needed for running tests.

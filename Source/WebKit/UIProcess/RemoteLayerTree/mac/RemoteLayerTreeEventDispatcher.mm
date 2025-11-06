@@ -694,6 +694,16 @@ void RemoteLayerTreeEventDispatcher::updateAnimations()
             m_animationStacks.set(layerID, WTFMove(animationStack));
     }
 }
+
+RefPtr<const RemoteAnimationStack> RemoteLayerTreeEventDispatcher::animationStackForNodeWithIDForTesting(WebCore::PlatformLayerIdentifier layerID) const
+{
+    assertIsHeld(m_animationLock);
+
+    auto it = m_animationStacks.find(layerID);
+    if (it != m_animationStacks.end())
+        return it->value.ptr();
+    return nullptr;
+}
 #endif
 
 void RemoteLayerTreeEventDispatcher::windowScreenWillChange()

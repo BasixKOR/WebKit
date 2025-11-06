@@ -274,7 +274,6 @@ page/OpportunisticTaskScheduler.cpp
 page/PageColorSampler.cpp
 page/PageGroup.cpp
 page/PageGroupLoadDeferrer.cpp
-page/PageOverlay.cpp
 page/PageOverlayController.cpp
 page/PageSerializer.cpp
 page/PerformanceLogging.cpp

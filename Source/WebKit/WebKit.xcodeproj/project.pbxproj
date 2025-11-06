@@ -1553,6 +1553,7 @@
 		6D4DF20C2D824242001F964C /* ScreenTimeWebsiteDataSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D77DBC22D80D3D6008ED0DD /* ScreenTimeWebsiteDataSupport.h */; };
 		6D9A666E2A27FAE300BD68A0 /* WebTouchEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F4001002527D73C00E91DA7 /* WebTouchEvent.h */; };
 		6EE849C81368D9390038D481 /* WKInspectorPrivateMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 6EE849C61368D92D0038D481 /* WKInspectorPrivateMac.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		7114EA442EBCB3FD00190912 /* RemoteAnimationUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 7114EA422EBCB35600190912 /* RemoteAnimationUtilities.h */; };
 		711725A9228D564300018514 /* WebsiteLegacyOverflowScrollingTouchPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 711725A8228D563A00018514 /* WebsiteLegacyOverflowScrollingTouchPolicy.h */; };
 		7121A3CF2B73728B00C8F7A4 /* CAFrameRateRangeUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 7121A3CE2B73727B00C8F7A4 /* CAFrameRateRangeUtilities.h */; };
 		7134A3DA2603B92500624BD3 /* WKModelInteractionGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7134A3D92603B80E00624BD3 /* WKModelInteractionGestureRecognizer.h */; };
@@ -6682,6 +6683,8 @@
 		6D77DBC32D80D3EC008ED0DD /* ScreenTimeWebsiteDataSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ScreenTimeWebsiteDataSupport.mm; sourceTree = "<group>"; };
 		6D8A91A511F0EFD100DD01FE /* com.apple.WebProcess.sb.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = com.apple.WebProcess.sb.in; path = WebProcess/com.apple.WebProcess.sb.in; sourceTree = "<group>"; };
 		6EE849C61368D92D0038D481 /* WKInspectorPrivateMac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKInspectorPrivateMac.h; path = mac/WKInspectorPrivateMac.h; sourceTree = "<group>"; };
+		7114EA422EBCB35600190912 /* RemoteAnimationUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteAnimationUtilities.h; sourceTree = "<group>"; };
+		7114EA432EBCB35600190912 /* RemoteAnimationUtilities.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteAnimationUtilities.cpp; sourceTree = "<group>"; };
 		711725A8228D563A00018514 /* WebsiteLegacyOverflowScrollingTouchPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebsiteLegacyOverflowScrollingTouchPolicy.h; sourceTree = "<group>"; };
 		7121A3CE2B73727B00C8F7A4 /* CAFrameRateRangeUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAFrameRateRangeUtilities.h; sourceTree = "<group>"; };
 		7134A3D82603B80E00624BD3 /* WKModelInteractionGestureRecognizer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WKModelInteractionGestureRecognizer.mm; sourceTree = "<group>"; };
@@ -11438,6 +11441,8 @@
 				71371D1F2B1F89C10092C32D /* RemoteAnimationStack.mm */,
 				71C9EC9E2CF9F93600B8AF06 /* RemoteAnimationTimeline.cpp */,
 				71C9EC9D2CF9F93600B8AF06 /* RemoteAnimationTimeline.h */,
+				7114EA432EBCB35600190912 /* RemoteAnimationUtilities.cpp */,
+				7114EA422EBCB35600190912 /* RemoteAnimationUtilities.h */,
 				1AB16AE01648656D00290D62 /* RemoteLayerTreeDrawingAreaProxy.h */,
 				0FF24A2F1879E4FE003ABF0C /* RemoteLayerTreeDrawingAreaProxy.messages.in */,
 				1AB16ADF1648656D00290D62 /* RemoteLayerTreeDrawingAreaProxy.mm */,
@@ -18028,6 +18033,7 @@
 				71F62F752D076DEE00B591D2 /* RemoteAnimation.h in Headers */,
 				71E29A342B20610C0010F3C9 /* RemoteAnimationStack.h in Headers */,
 				71C9EC9F2CF9FB6400B8AF06 /* RemoteAnimationTimeline.h in Headers */,
+				7114EA442EBCB3FD00190912 /* RemoteAnimationUtilities.h in Headers */,
 				9B1229D223FF2BCC008CA751 /* RemoteAudioDestinationIdentifier.h in Headers */,
 				9B1229CD23FF25F2008CA751 /* RemoteAudioDestinationManager.h in Headers */,
 				9B5BEC2A240101580070C6EF /* RemoteAudioDestinationProxy.h in Headers */,

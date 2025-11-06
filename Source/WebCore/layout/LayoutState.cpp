@@ -171,9 +171,9 @@ LayoutUnit LayoutState::logicalHeightWithFormattingContextForBox(const ElementBo
     return const_cast<LayoutState&>(*this).m_formattingContextLogicalHeightFunction(box, logicalHeightType);
 }
 
-void LayoutState::layoutWithFormattingContextForBlockInInline(const Layout::ElementBox& block, const BlockLayoutState& parentBlockLayoutState) const
+void LayoutState::layoutWithFormattingContextForBlockInInline(const Layout::ElementBox& block, LayoutPoint blockLogicalTopLeft, const BlockLayoutState& parentBlockLayoutState) const
 {
-    const_cast<LayoutState&>(*this).m_formattingContextLayoutForBlockInInlineFunction(block, const_cast<BlockLayoutState&>(parentBlockLayoutState), const_cast<LayoutState&>(*this));
+    const_cast<LayoutState&>(*this).m_formattingContextLayoutForBlockInInlineFunction(block, blockLogicalTopLeft, const_cast<BlockLayoutState&>(parentBlockLayoutState), const_cast<LayoutState&>(*this));
 }
 
 }

@@ -47,6 +47,7 @@ struct MainFrameData;
 struct RemoteLayerTreeCommitBundle;
 
 #if ENABLE(THREADED_ANIMATIONS)
+class RemoteAnimationStack;
 class RemoteAnimationTimeline;
 #endif
 
@@ -86,6 +87,7 @@ public:
     void animationsWereRemovedFromNode(RemoteLayerTreeNode&);
     void updateTimelineRegistration(WebCore::ProcessIdentifier, const HashSet<Ref<WebCore::AcceleratedTimeline>>&, MonotonicTime);
     RefPtr<const RemoteAnimationTimeline> timeline(const TimelineID&) const;
+    RefPtr<const RemoteAnimationStack> animationStackForNodeWithIDForTesting(WebCore::PlatformLayerIdentifier) const;
 #endif
 
     // For testing.

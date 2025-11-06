@@ -398,7 +398,6 @@ page/MemoryRelease.cpp
 page/NavigateEvent.cpp
 [ iOS ] page/Page.cpp
 page/PageColorSampler.cpp
-page/PageOverlay.cpp
 page/PageOverlayController.cpp
 page/PageSerializer.cpp
 page/Performance.cpp

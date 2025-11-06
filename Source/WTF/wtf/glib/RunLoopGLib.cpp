@@ -146,6 +146,7 @@ void RunLoop::run()
 void RunLoop::stop()
 {
     m_shouldStop = true;
+    wakeUp();
 }
 
 void RunLoop::wakeUp()

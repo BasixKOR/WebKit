@@ -259,7 +259,6 @@ page/LocalFrame.cpp
 page/LocalFrameView.cpp
 page/LocalFrameViewLayoutContext.cpp
 page/PageColorSampler.cpp
-page/PageOverlay.cpp
 page/PageSerializer.cpp
 page/PerformanceTiming.cpp
 page/PrintContext.cpp

@@ -479,7 +479,8 @@ void RenderTreeBuilder::Inline::wrapRunsOfBlocksInAnonymousBlock(RenderInline& p
             lastInRun = nullptr;
             continue;
         }
-        if (auto* blockChild = dynamicDowncast<RenderBlock>(*child)) {
+        if (auto* blockChild = dynamicDowncast<RenderBlock>(*child); blockChild && blockChild->isInFlow()) {
+            // Floats and out-of-flow boxes are wrapped if they are in the middle of a block run.
             if (!firstInRun)
                 firstInRun = blockChild;
             lastInRun = blockChild;

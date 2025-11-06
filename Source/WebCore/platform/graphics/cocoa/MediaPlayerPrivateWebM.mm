@@ -990,7 +990,10 @@ void MediaPlayerPrivateWebM::notifyClientWhenReadyForMoreSamples(TrackID trackId
         return;
     m_requestReadyForMoreSamplesSetMap[trackId] = true;
 
-    m_renderer->requestMediaDataWhenReady(trackIdentifierFor(trackId), [weakThis = ThreadSafeWeakPtr { *this }, trackId](AudioVideoRenderer::TrackIdentifier) {
+    auto trackIdentifier = maybeTrackIdentifierFor(trackId);
+    if (!trackIdentifier)
+        return; // track hasn't been enabled yet.
+    m_renderer->requestMediaDataWhenReady(*trackIdentifier, [weakThis = ThreadSafeWeakPtr { *this }, trackId](AudioVideoRenderer::TrackIdentifier) {
         if (RefPtr protectedThis = weakThis.get())
             protectedThis->didBecomeReadyForMoreSamples(trackId);
     });
@@ -1002,7 +1005,8 @@ bool MediaPlayerPrivateWebM::isReadyForMoreSamples(TrackID trackId)
         if (m_layerRequiresFlush)
             return false;
     }
-    return m_renderer->isReadyForMoreSamples(trackIdentifierFor(trackId));
+    auto trackIdentifier = maybeTrackIdentifierFor(trackId);
+    return trackIdentifier && m_renderer->isReadyForMoreSamples(*trackIdentifier);
 }
 
 void MediaPlayerPrivateWebM::didBecomeReadyForMoreSamples(TrackID trackId)
@@ -1517,6 +1521,13 @@ AudioVideoRenderer::TrackIdentifier MediaPlayerPrivateWebM::trackIdentifierFor(T
     auto it = m_trackIdentifiers.find(trackID);
     ASSERT(it != m_trackIdentifiers.end());
     return it->second;
+}
+
+std::optional<AudioVideoRenderer::TrackIdentifier> MediaPlayerPrivateWebM::maybeTrackIdentifierFor(TrackID trackID) const
+{
+    if (auto it = m_trackIdentifiers.find(trackID); it != m_trackIdentifiers.end())
+        return it->second;
+    return { };
 }
 
 void MediaPlayerPrivateWebM::setLayerRequiresFlush()
